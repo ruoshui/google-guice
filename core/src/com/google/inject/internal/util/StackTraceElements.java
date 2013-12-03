@@ -53,10 +53,16 @@ public class StackTraceElements {
     Class declaringClass = member.getDeclaringClass();
 
     /*if[AOP]*/
-    LineNumbers lineNumbers = lineNumbersCache.get(declaringClass);
-    String fileName = lineNumbers.getSource();
-    Integer lineNumberOrNull = lineNumbers.getLineNumber(member);
-    int lineNumber = lineNumberOrNull == null ? lineNumbers.getFirstLine() : lineNumberOrNull;
+    String fileName = null;
+    int lineNumber = -1;
+    try {
+      LineNumbers lineNumbers = lineNumbersCache.get(declaringClass);
+      fileName = lineNumbers.getSource();
+      Integer lineNumberOrNull = lineNumbers.getLineNumber(member);
+      lineNumber = lineNumberOrNull == null ? lineNumbers.getFirstLine() : lineNumberOrNull;
+    }
+    catch (RuntimeException ignore) {
+    }
     /*end[AOP]*/
     /*if[NO_AOP]
     String fileName = null;
